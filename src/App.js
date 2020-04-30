@@ -1,13 +1,11 @@
 import React from 'react';
-import './App.css';
+import './styles/App.scss';
 import {useState, useEffect} from 'react';
-
 import { InputLabel, MenuItem, Select } from '@material-ui/core';
 
 function App() {
-
   // REPLACE THIS WITH YOUR OWN API KEY
-  const API_KEY = "123456789ABCDEF";
+  const API_KEY = process.env.REACT_APP_CTA_BUS_API;
 
   const [routes, setRoutes] = useState([]);
   const [selectedRoute, setSelectedRoute] = useState("");
@@ -38,6 +36,8 @@ function App() {
     setSelectedStop(e.target.value);
     console.log("selected stop: " + e.target.value);
   }
+
+  const popularBusRoutes = [4, 9, 77,];
 
   const proxy = "https://can-cors.herokuapp.com/"
 
@@ -85,7 +85,7 @@ function App() {
 
 useEffect( ()=> {
   if(selectedStop){
-    console.log("fetching predictions");
+    console.log("fetching predictions", );
 
     let baseURI = proxy + 'http://ctabustracker.com/bustime/api/v2/getpredictions?key=' + API_KEY + '&rt=' + selectedRoute + '&stpid=' + selectedStop + '&format=json';
 
@@ -107,6 +107,19 @@ useEffect( ()=> {
       <div className="header">
         CTA Bus Tracker
       </div>
+      <div className="welcome">
+        <div className="welcome-left">
+          <h2 className="welcome-title">
+            Real-time bus tracker
+          </h2>
+          <p className="welcome-description">
+            Get up to date travel times on your route via bus in Chicago.
+          </p>
+        </div>
+        <div className="welcome-right">
+          
+        </div>
+      </div>
       <div className="dropdowns">
         <div className="dropdown-routes">
           <InputLabel id="routes-label">Routes</InputLabel>
@@ -117,7 +130,7 @@ useEffect( ()=> {
             value={selectedRoute}
             onChange={handleRouteSelect}
           >
-            {routes.map((item, index) => <MenuItem value={item.rt}>{item.rt}. {item.rtnm} </MenuItem> )}
+            {routes.map((item, index) => <MenuItem value={item.rt} key={item.rt}>{item.rt}. {item.rtnm} </MenuItem> )}
           </Select>
         </div>
 
@@ -130,7 +143,7 @@ useEffect( ()=> {
             value={selectedDirection}
             onChange={handleDirectionSelect}
           >
-            {directions.map((item, index) => <MenuItem value={item.dir}>{item.dir} </MenuItem> )}
+            {directions.map((item, index) => <MenuItem value={item.dir} key={item.dir}>{item.dir} </MenuItem> )}
           </Select>
         </div>
 
@@ -143,24 +156,30 @@ useEffect( ()=> {
             value={selectedStop}
             onChange={handleStopSelect}
           >
-            {stops.map((item, index) => <MenuItem value={item.stpid}>{item.stpnm} </MenuItem> )}
+            {stops.map((item, index) => <MenuItem value={item.stpid} key={item.stpid}>{item.stpnm} </MenuItem> )}
           </Select>
         </div>
       </div>
 
+      <div className="shortcuts">
+        {popularBusRoutes.map(bus => 
+          <div className="shortcuts-button"><span onClick={() => setSelectedRoute(bus)}>#{bus}</span></div>
+        )}
+      </div>
+
       <div className="predictions">
         <ul style={{listStyle: "none"} }>
-        {predictions.length > 0?
-        predictions.map((item, index) => 
-            <li >
+        {predictions.length > 0
+        ? predictions.map((item, index) => 
+            <li className={item.rtprdctdn}>
               <div className="prediction">
                 <p className="prediction-route-number">{item.rt + " to " + item.des}</p>
-                <p className="prediction-time">{" " + (isNaN(item.prdctdn)?item.prdctdn: item.prdctdn+" min" ) }</p>
+                <p className="prediction-time">{" " + (isNaN(item.prdctdn) ? item.prdctdn : item.prdctdn + " min" )}</p>
               </div>
 
             </li>)
             :
-        <div className="predictions-empty">No Information Availabe</div>
+        <div className="predictions-empty"></div>
         }
         </ul>
       </div>

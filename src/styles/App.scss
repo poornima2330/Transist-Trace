@@ -1,0 +1,172 @@
+@import "variables";
+@import "align";
+@import "mixins";
+
+* {
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  font-family: $primary-font;
+}
+
+.App {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+  flex-wrap: wrap;
+  background-size: cover;
+  background-position: center;
+}
+
+@media (min-width: 768px) {
+  .dropdowns {
+    width: 75vw;
+    flex-flow: row wrap;
+  }
+}
+@media (max-width: 767px) {
+  .dropdowns {
+    width: 90vw;
+    align-items: center;
+    flex-flow: column wrap;
+  }
+}
+
+.header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  justify-content: center;
+  background-color: $primary-color;
+
+  color: $secondary-color;
+  font-size: 30px;
+
+  padding: 30px 0px;
+  width: 100vw;
+}
+
+.welcome {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+
+  &-left {
+    width: 50%;
+    padding: 120px 60px;
+    background-color: $primary-color;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+    @include mobile {
+      padding: 30px 10px;
+    }
+  }
+
+  &-right {
+    width: 50%;
+    padding: 120px 60px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+    @include mobile {
+      padding: 30px 10px;
+    }
+  }
+
+  &-title {
+    font-weight: 700;
+    font-size: 80px;
+    line-height: 80px;
+
+    @include mobile {
+      font-size: 30px;
+      line-height: 30px;
+    }
+  }
+
+  &-description {
+    font-weight: 300;
+    font-size: 32px;
+
+    @include mobile {
+      font-size: 14px;
+    }
+  }
+}
+
+.dropdowns {
+  display: flex;
+  justify-content: center;
+  background-color: $white;
+  @include rounded-corners;
+  @include shadows;
+  padding: 30px 0px;
+  margin-top: -30px;
+  @include ease-transition;
+
+  @include mobile {
+    margin-top: -15px;
+  }
+}
+
+.dropdown-routes,
+.dropdown-direction,
+.dropdown-stop {
+  margin: 10px;
+}
+
+.predictions {
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+
+  @include mobile {
+    width: 90%;
+  }
+
+  .prediction {
+    background-color: $primary-color;
+    @include rounded-corners;
+    @include shadows;
+    margin: 5px 0;
+    padding: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    .prediction-route-number {
+      font-size: 22px;
+    }
+
+    .prediction-time {
+      font-size: 20px;
+    }
+  }
+
+  .predictions-empty {
+    margin: 20px;
+  }
+}
+
+.shortcuts {
+  margin: 20px;
+  display: flex;
+  flex-direction: row;
+
+  &-button {
+    cursor: pointer;
+    @include rounded-corners;
+    background-color: $red-dark;
+    padding: 8px 12px;
+    margin: 0 5px;
+    color: $white;
+  }
+}
