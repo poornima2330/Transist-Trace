@@ -9,6 +9,7 @@
 
 body {
   font-family: $primary-font;
+  background-color: $primary-color;
 }
 
 .App {
@@ -19,6 +20,8 @@ body {
   flex-wrap: wrap;
   background-size: cover;
   background-position: center;
+  max-width: 1440px;
+  margin: 0px auto;
 }
 
 @media (min-width: 768px) {
@@ -36,18 +39,15 @@ body {
 }
 
 .header {
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-
   justify-content: center;
   background-color: $primary-color;
-
   color: $secondary-color;
   font-size: 30px;
-
   padding: 30px 0px;
-  width: 100vw;
 }
 
 .welcome {
@@ -105,71 +105,82 @@ body {
   }
 }
 
-.dropdowns {
-  display: flex;
-  justify-content: center;
-  background-color: $white;
-  @include rounded-corners;
-  @include shadows;
-  padding: 30px 0px;
-  margin-top: -30px;
-  @include ease-transition;
-
-  @include mobile {
-    margin-top: -15px;
-  }
-}
-
-.dropdown-routes,
-.dropdown-direction,
-.dropdown-stop {
-  margin: 10px;
-}
-
-.predictions {
-  width: 80%;
+.main {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  background-color: $white;
+  width: 100%;
+  min-height: 100vh;
+  padding-bottom: 40px;
 
-  @include mobile {
-    width: 90%;
-  }
-
-  .prediction {
-    background-color: $primary-color;
+  .dropdowns {
+    display: flex;
+    width: 80%;
+    justify-content: center;
+    background-color: $white;
     @include rounded-corners;
     @include shadows;
-    margin: 5px 0;
-    padding: 20px;
+    padding: 30px 0px;
+    margin-top: -30px;
+    @include ease-transition;
+
+    @include mobile {
+      margin-top: -15px;
+    }
+  }
+
+  .dropdown-routes,
+  .dropdown-direction,
+  .dropdown-stop {
+    margin: 10px;
+  }
+
+  .predictions {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+
+    @include mobile {
+      width: 90%;
+    }
+
+    .prediction {
+      background-color: $primary-color;
+      @include rounded-corners;
+      @include shadows;
+      margin: 5px 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+
+      .prediction-route-number {
+        font-size: 22px;
+      }
+
+      .prediction-time {
+        font-size: 20px;
+      }
+    }
+
+    .predictions-empty {
+      margin: 20px;
+    }
+  }
+
+  .shortcuts {
+    margin: 20px;
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
 
-    .prediction-route-number {
-      font-size: 22px;
+    &-button {
+      cursor: pointer;
+      @include rounded-corners;
+      background-color: $red-dark;
+      padding: 8px 12px;
+      margin: 0 5px;
+      color: $white;
     }
-
-    .prediction-time {
-      font-size: 20px;
-    }
-  }
-
-  .predictions-empty {
-    margin: 20px;
-  }
-}
-
-.shortcuts {
-  margin: 20px;
-  display: flex;
-  flex-direction: row;
-
-  &-button {
-    cursor: pointer;
-    @include rounded-corners;
-    background-color: $red-dark;
-    padding: 8px 12px;
-    margin: 0 5px;
-    color: $white;
   }
 }

@@ -120,70 +120,72 @@ useEffect( ()=> {
           
         </div>
       </div>
-      <div className="dropdowns">
-        <div className="dropdown-routes">
-          <InputLabel id="routes-label">Routes</InputLabel>
-          <Select 
-            style={{width: 300}}
-            labelId="routes-label" 
-            id="routes" 
-            value={selectedRoute}
-            onChange={handleRouteSelect}
-          >
-            {routes.map((item, index) => <MenuItem value={item.rt} key={item.rt}>{item.rt}. {item.rtnm} </MenuItem> )}
-          </Select>
+
+      <div className="main">
+        <div className="dropdowns">
+          <div className="dropdown-routes">
+            <InputLabel id="routes-label">Routes</InputLabel>
+            <Select 
+              style={{width: 300}}
+              labelId="routes-label" 
+              id="routes" 
+              value={selectedRoute}
+              onChange={handleRouteSelect}
+            >
+              {routes.map((item, index) => <MenuItem value={item.rt} key={item.rt}>{item.rt}. {item.rtnm} </MenuItem> )}
+            </Select>
+          </div>
+
+          <div className="dropdown-direction">
+            <InputLabel id="directions-label">Directions</InputLabel>
+            <Select 
+              style={{ width: 300}}
+              labelId="directions-label" 
+              id="directions" 
+              value={selectedDirection}
+              onChange={handleDirectionSelect}
+            >
+              {directions.map((item, index) => <MenuItem value={item.dir} key={item.dir}>{item.dir} </MenuItem> )}
+            </Select>
+          </div>
+
+          <div className="dropdown-stop">
+            <InputLabel id="stops-label">Stops</InputLabel>
+            <Select 
+              style={{width: 300}}
+              labelId="stops-label" 
+              id="stops" 
+              value={selectedStop}
+              onChange={handleStopSelect}
+            >
+              {stops.map((item, index) => <MenuItem value={item.stpid} key={item.stpid}>{item.stpnm} </MenuItem> )}
+            </Select>
+          </div>
         </div>
 
-        <div className="dropdown-direction">
-          <InputLabel id="directions-label">Directions</InputLabel>
-          <Select 
-            style={{ width: 300}}
-            labelId="directions-label" 
-            id="directions" 
-            value={selectedDirection}
-            onChange={handleDirectionSelect}
-          >
-            {directions.map((item, index) => <MenuItem value={item.dir} key={item.dir}>{item.dir} </MenuItem> )}
-          </Select>
+        <div className="shortcuts">
+          {popularBusRoutes.map(bus => 
+            <div className="shortcuts-button"><span onClick={() => setSelectedRoute(bus)}>#{bus}</span></div>
+          )}
         </div>
 
-        <div className="dropdown-stop">
-          <InputLabel id="stops-label">Stops</InputLabel>
-          <Select 
-            style={{width: 300}}
-            labelId="stops-label" 
-            id="stops" 
-            value={selectedStop}
-            onChange={handleStopSelect}
-          >
-            {stops.map((item, index) => <MenuItem value={item.stpid} key={item.stpid}>{item.stpnm} </MenuItem> )}
-          </Select>
+        <div className="predictions">
+          <ul style={{listStyle: "none"}}>
+          {predictions.length > 0
+          ? predictions.map((item, index) => 
+              <li className={item.rtprdctdn}>
+                <div className="prediction">
+                  <p className="prediction-route-number">{item.rt + " to " + item.des}</p>
+                  <p className="prediction-time">{" " + (isNaN(item.prdctdn) ? item.prdctdn : item.prdctdn + " min" )}</p>
+                </div>
+
+              </li>)
+              :
+          <div className="predictions-empty">No information found</div>
+          }
+          </ul>
         </div>
       </div>
-
-      <div className="shortcuts">
-        {popularBusRoutes.map(bus => 
-          <div className="shortcuts-button"><span onClick={() => setSelectedRoute(bus)}>#{bus}</span></div>
-        )}
-      </div>
-
-      <div className="predictions">
-        <ul style={{listStyle: "none"} }>
-        {predictions.length > 0
-        ? predictions.map((item, index) => 
-            <li className={item.rtprdctdn}>
-              <div className="prediction">
-                <p className="prediction-route-number">{item.rt + " to " + item.des}</p>
-                <p className="prediction-time">{" " + (isNaN(item.prdctdn) ? item.prdctdn : item.prdctdn + " min" )}</p>
-              </div>
-
-            </li>)
-            :
-        <div className="predictions-empty"></div>
-        }
-        </ul>
-      </div>
-
     </div>
   );
 }
