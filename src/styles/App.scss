@@ -205,6 +205,10 @@ body {
         min-height: auto;
       }
 
+      @include mobile {
+        width: 100%;
+      }
+
       .prediction {
         @include tablet {
           &:not(:nth-child(2)) {
