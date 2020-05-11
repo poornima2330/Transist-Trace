@@ -2,6 +2,8 @@ import React from 'react';
 import './styles/App.scss';
 import {useState, useEffect} from 'react';
 import { InputLabel, MenuItem, Select } from '@material-ui/core';
+import Trains from './Trains';
+import Buses from './Buses';
 
 function App() {
   // REPLACE THIS WITH YOUR OWN API KEY
@@ -41,7 +43,7 @@ function App() {
 
   const proxy = "https://can-cors.herokuapp.com/"
 
-  useEffect( ()=> {
+  useEffect( () => {
     let baseURI = proxy + 'http://ctabustracker.com/bustime/api/v2/getroutes?key='+ API_KEY + '&format=json';
     console.log("fetching routes");
     fetch(baseURI)
@@ -73,19 +75,32 @@ function App() {
 
       let baseURI = proxy + 'http://ctabustracker.com/bustime/api/v2/getstops?key=' + API_KEY + '&rt=' + selectedRoute + '&dir=' + selectedDirection + '&format=json';
 
+      let baseURI2 = proxy + 'http://ctabustracker.com/bustime/api/v2/getstops?key=' + API_KEY + '&rt=' + selectedRoute + '&dir=' + directions[1] + '&format=json';
+
       fetch(baseURI)
       .then(res => res.json())
       .then(response => {
         setStops(response["bustime-response"]["stops"]);
+        console.log('STTAAAHPPS', response["bustime-response"]["stops"])
       })
       .catch();
+
+    //   const direction2 = fetch(baseURI2)
+    //   .then(res => res.json())
+    //   .then(response => {
+    //     setStops(response["bustime-response"]["stops"]);
+    //     console.log('STTAAAHPPS', response["bustime-response"]["stops"])
+    //   })
+    //   .catch();
+
+    // console.log('direction2', direction2);
     }
 }, [selectedDirection, selectedRoute]);
 
 
 useEffect( ()=> {
   if(selectedStop){
-    console.log("fetching predictions", );
+    console.log("fetching predictions", selectedStop);
 
     let baseURI = proxy + 'http://ctabustracker.com/bustime/api/v2/getpredictions?key=' + API_KEY + '&rt=' + selectedRoute + '&stpid=' + selectedStop + '&format=json';
 
@@ -99,8 +114,9 @@ useEffect( ()=> {
     })
     .catch(setPredictions([]));
   }
+  console.log(selectedDirection, selectedRoute, selectedStop);
 }, [selectedDirection, selectedRoute, selectedStop]);
-  
+
   return (
     <div className="App">
 
@@ -145,7 +161,11 @@ useEffect( ()=> {
               value={selectedDirection}
               onChange={handleDirectionSelect}
             >
-              {directions.map((item, index) => <MenuItem value={item.dir} key={item.dir}>{item.dir} </MenuItem> )}
+              {directions.map((item, index) => (
+                <MenuItem value={item.dir} key={item.dir}>
+                  {item.dir}
+                </MenuItem> 
+              ))}
             </Select>
           </div>
 
@@ -165,17 +185,54 @@ useEffect( ()=> {
 
         <div className="shortcuts">
           {popularBusRoutes.map(bus => 
-            <div className="shortcuts-button"><span onClick={() => setSelectedRoute(bus)}>#{bus}</span></div>
+            <div className="shortcuts-button" key={bus}><span onClick={() => setSelectedRoute(bus)}>#{bus}</span></div>
           )}
         </div>
+        <div className="grid">
+          <Trains
+            stationName="Forest Park"
+            stationNumber="30013"
+          />
+          <Trains
+            stationName="O'Hare"
+            stationNumber="30012"
+          />
 
+          <Buses
+            stationName="Kimball South"
+            routeNumber='82'
+            stopNumber='11139'
+          />
+
+          <Buses
+            stationName="Kimball North"
+            routeNumber='82'
+            stopNumber='11271'
+          />
+
+          <Buses
+            stationName="Belmont East"
+            routeNumber='77'
+            stopNumber='9273'
+          />
+
+          <Buses
+            stationName="Belmont West"
+            routeNumber='77'
+            stopNumber='9314'
+          />
+        </div>
         <div className="predictions">
+          <h2 align="center">Bus Times</h2>
           <ul style={{listStyle: "none"}}>
           {predictions.length > 0
           ? predictions.map((item, index) => 
               <li className={item.rtprdctdn}>
                 <div className="prediction">
-                  <p className="prediction-route-number">{item.rt + " to " + item.des}</p>
+                  <p className="prediction-route-number">
+                    {item.rt + " to " + item.des}
+                    <span className="prediction-route-number-direction">{item.rtdir}</span>
+                  </p>
                   <p className="prediction-time">{" " + (isNaN(item.prdctdn) ? item.prdctdn : item.prdctdn + " min" )}</p>
                 </div>
 

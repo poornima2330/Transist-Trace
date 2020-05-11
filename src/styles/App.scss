@@ -138,6 +138,8 @@ body {
 
   .predictions {
     width: 80%;
+    min-height: 220px;
+    margin-top: 30px;
     display: flex;
     flex-direction: column;
 
@@ -145,8 +147,16 @@ body {
       width: 90%;
     }
 
+    &.buses {
+      min-height: 110px;
+      .prediction {
+        background-color: $secondary-color-bold;
+      }
+    }
+
     .prediction {
       background-color: $primary-color;
+      color: $white;
       @include rounded-corners;
       @include shadows;
       margin: 5px 0;
@@ -154,18 +164,65 @@ body {
       display: flex;
       flex-direction: row;
       justify-content: space-between;
+      align-items: center;
 
       .prediction-route-number {
         font-size: 22px;
+        display: flex;
+        flex-direction: column;
+
+        &-direction {
+          font-size: 15px;
+          font-weight: 400;
+        }
       }
 
       .prediction-time {
-        font-size: 20px;
+        font-size: 32px;
+        min-width: 34%;
+        text-align: right;
       }
     }
 
     .predictions-empty {
       margin: 20px;
+    }
+  }
+
+  .grid {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    width: 100%;
+
+    .predictions {
+      width: 45%;
+      margin: 5px;
+
+      @include tablet {
+        min-height: auto;
+      }
+
+      .prediction {
+        @include tablet {
+          &:not(:nth-child(2)) {
+            display: none;
+          }
+        }
+
+        &-route-number {
+          @include tablet {
+            font-size: 16px;
+          }
+
+          &-direction {
+            @include tablet {
+              font-weight: 300;
+            }
+          }
+        }
+      }
     }
   }
 
