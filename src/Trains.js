@@ -34,7 +34,7 @@ export default function Trains(props) {
     return (
         <div className="predictions trains">
             <h2 align="center">{props.stationName} Trains</h2>
-            {trains || trains.length
+            {trains
             ? trains.map(train => (
                 <div className="prediction" key={train.arrT}>
                 <p className="prediction-route-number">
