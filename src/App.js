@@ -8,6 +8,7 @@ import Buses from './Buses';
 function App() {
   // REPLACE THIS WITH YOUR OWN API KEY
   const API_KEY = process.env.REACT_APP_CTA_BUS_API;
+  const WEATHER_API_KEY = process.env.REACT_APP_WEATHER_API_KEY;
 
   const [routes, setRoutes] = useState([]);
   const [selectedRoute, setSelectedRoute] = useState('');
@@ -19,6 +20,8 @@ function App() {
   const [selectedStop, setSelectedStop] = useState('');
 
   const [predictions, setPredictions] = useState([]);
+
+  const [weather, setWeather] = useState('');
 
   const handleRouteSelect = (e) => {
     setSelectedRoute(e.target.value);
@@ -42,13 +45,27 @@ function App() {
 
   const proxy = 'https://can-cors.herokuapp.com/';
 
+  // useEffect(() => {
+  //   const weatherURL = `https://api.openweathermap.org/data/2.5/weather?zip=60618,us&units=imperial&appid=${WEATHER_API_KEY}`;
+  //   setWeather('Loading Weather Info...');
+  //   // const updateEveryMinute = setInterval(() => {
+  //   fetch(weatherURL)
+  //     .then((res) => res.json())
+  //     .then((response) => {
+  //       console.log(response);
+  //       setWeather(response);
+  //     });
+  //   // }, 60000);
+  //   // return () => clearInterval(updateEveryMinute);
+  // }, []);
+
   useEffect(() => {
     let baseURI =
       proxy +
       'http://ctabustracker.com/bustime/api/v2/getroutes?key=' +
       API_KEY +
       '&format=json';
-    console.log('fetching routes');
+    console.log('fetching routes', baseURI);
     fetch(baseURI)
       .then((res) => res.json())
       .then((response) => {
@@ -222,6 +239,25 @@ function App() {
             </div>
           ))}
         </div>
+        {!weather.main || weather.main.length ? (
+          ''
+        ) : (
+          <div className='weather'>
+            <div className='weather-icon'>
+              <img
+                src={`http://openweathermap.org/img/w/${weather.weather[0].icon}.png`}
+              />
+            </div>
+            <div className='weather-temp'>
+              {weather.main.temp}&deg;<span>F</span>
+              <br />
+              <div className='weather-temp-description'>
+                {weather.weather[0].description}
+              </div>
+            </div>
+          </div>
+        )}
+
         <div className='grid'>
           <Trains stationName='Forest Park' stationNumber='30013' />
           <Trains stationName="O'Hare" stationNumber='30012' />

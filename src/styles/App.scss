@@ -166,6 +166,25 @@ body {
       justify-content: space-between;
       align-items: center;
 
+      &.due {
+        animation: 2s pulse;
+        animation-iteration-count: infinite;
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+        }
+
+        50% {
+          transform: scale(1.02);
+        }
+
+        100% {
+          transform: scale(1);
+        }
+      }
+
       .prediction-route-number {
         font-size: 22px;
         display: flex;
@@ -227,6 +246,25 @@ body {
             }
           }
         }
+      }
+    }
+  }
+
+  .weather {
+    display: flex;
+    width: 95%;
+    align-items: center;
+    justify-content: flex-end;
+
+    &-temp {
+      font-size: 2em;
+
+      span {
+        font-weight: 300;
+      }
+
+      &-description {
+        font-size: 11px;
       }
     }
   }
