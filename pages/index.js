@@ -1,14 +1,13 @@
 import React from 'react';
-import './styles/App.scss';
 import { useState, useEffect } from 'react';
 import { InputLabel, MenuItem, Select } from '@material-ui/core';
-import Trains from './Trains';
-import Buses from './Buses';
+import Trains from '../components/Trains';
+import Buses from '../components/Buses';
 
 function App() {
   // REPLACE THIS WITH YOUR OWN API KEY
-  const API_KEY = process.env.REACT_APP_CTA_BUS_API;
-  const WEATHER_API_KEY = process.env.REACT_APP_WEATHER_API_KEY;
+  const API_KEY = process.env.NEXT_PUBLIC_CTA_BUS_API;
+  const WEATHER_API_KEY = process.env.NEXT_PUBLIC_WEATHER_API_KEY;
 
   const [routes, setRoutes] = useState([]);
   const [selectedRoute, setSelectedRoute] = useState('');

@@ -2,7 +2,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 
 export default function Trains(props) {
-  const TRAIN_API_KEY = process.env.REACT_APP_CTA_TRAIN_API;
+  const TRAIN_API_KEY = process.env.NEXT_PUBLIC_CTA_TRAIN_API;
   const [trains, setTrains] = useState([]);
 
   async function trainTimes(data) {
