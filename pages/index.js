@@ -1,4 +1,5 @@
 import React from 'react';
+import Head from 'next/head';
 import { useState, useEffect } from 'react';
 import { InputLabel, MenuItem, Select } from '@material-ui/core';
 import Trains from '../components/Trains';
@@ -166,6 +167,10 @@ function App() {
 
   return (
     <div className='App'>
+      <Head>
+        <title>CTA Tracker for Avondale, Chicago IL</title>
+        <link rel='icon' type='image/png' href='/favicon.png' />
+      </Head>
       <div className='header'>CTA Bus Tracker</div>
       <div className='welcome'>
         <div className='welcome-left'>
