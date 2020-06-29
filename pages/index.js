@@ -21,7 +21,37 @@ function App() {
 
   const [predictions, setPredictions] = useState([]);
 
-  const [weather, setWeather] = useState('');
+  const [weather, setWeather] = useState({
+    coord: { lon: -87.7, lat: 41.95 },
+    weather: [
+      { id: 501, main: 'Rain', description: 'moderate rain', icon: '10d' },
+    ],
+    base: 'stations',
+    main: {
+      temp: 80.15,
+      feels_like: 77.76,
+      temp_min: 77,
+      temp_max: 86,
+      pressure: 1013,
+      humidity: 54,
+    },
+    visibility: 16093,
+    wind: { speed: 11.41, deg: 210 },
+    rain: { '1h': 2.54 },
+    clouds: { all: 75 },
+    dt: 1593466811,
+    sys: {
+      type: 1,
+      id: 4861,
+      country: 'US',
+      sunrise: 1593425902,
+      sunset: 1593480607,
+    },
+    timezone: -18000,
+    id: 0,
+    name: 'Chicago',
+    cod: 200,
+  });
 
   const handleRouteSelect = (e) => {
     setSelectedRoute(e.target.value);
@@ -45,19 +75,21 @@ function App() {
 
   const proxy = 'https://can-cors.herokuapp.com/';
 
-  // useEffect(() => {
-  //   const weatherURL = `https://api.openweathermap.org/data/2.5/weather?zip=60618,us&units=imperial&appid=${WEATHER_API_KEY}`;
-  //   setWeather('Loading Weather Info...');
-  //   // const updateEveryMinute = setInterval(() => {
-  //   fetch(weatherURL)
-  //     .then((res) => res.json())
-  //     .then((response) => {
-  //       console.log(response);
-  //       setWeather(response);
-  //     });
-  //   // }, 60000);
-  //   // return () => clearInterval(updateEveryMinute);
-  // }, []);
+  if (process.env.NODE_ENV === 'production') {
+    useEffect(() => {
+      const weatherURL = `https://api.openweathermap.org/data/2.5/weather?zip=60618,us&units=imperial&appid=${WEATHER_API_KEY}`;
+      setWeather('Loading Weather Info...');
+      const updateEvery2Minute = setInterval(() => {
+        fetch(weatherURL)
+          .then((res) => res.json())
+          .then((response) => {
+            console.log(response);
+            setWeather(response);
+          });
+      }, 120000);
+      return () => clearInterval(updateEvery2Minute);
+    }, []);
+  }
 
   useEffect(() => {
     let baseURI =
