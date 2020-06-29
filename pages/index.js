@@ -24,11 +24,16 @@ function App() {
   const [weather, setWeather] = useState({
     coord: { lon: -87.7, lat: 41.95 },
     weather: [
-      { id: 501, main: 'Rain', description: 'moderate rain', icon: '10d' },
+      {
+        id: 501,
+        main: 'Rain',
+        description: 'Always sunny in Philly',
+        icon: '10d',
+      },
     ],
     base: 'stations',
     main: {
-      temp: 80.15,
+      temp: 42,
       feels_like: 77.76,
       temp_min: 77,
       temp_max: 86,
@@ -86,15 +91,15 @@ function App() {
       });
   }
 
-  if (!process.env.NODE_ENV === 'development') {
-    useEffect(() => {
+  useEffect(() => {
+    if (!process.env.NODE_ENV === 'development') {
       getWeather();
       const updateEvery2Minute = setInterval(() => {
         getWeather();
       }, 1800000);
       return () => clearInterval(updateEvery2Minute);
-    }, []);
-  }
+    }
+  }, []);
 
   useEffect(() => {
     let baseURI =
@@ -286,7 +291,7 @@ function App() {
           <div className='weather'>
             <div className='weather-icon'>
               <img
-                src={`http://openweathermap.org/img/w/${weather.weather[0].icon}.png`}
+                src={`https://openweathermap.org/img/w/${weather.weather[0].icon}.png`}
               />
             </div>
             <div className='weather-temp'>
