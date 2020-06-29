@@ -75,18 +75,23 @@ function App() {
 
   const proxy = 'https://can-cors.herokuapp.com/';
 
+  async function getWeather() {
+    const weatherURL = `https://api.openweathermap.org/data/2.5/weather?zip=60618,us&units=imperial&appid=${WEATHER_API_KEY}`;
+    setWeather('Loading Weather Info...');
+    fetch(weatherURL)
+      .then((res) => res.json())
+      .then((response) => {
+        console.log(response);
+        setWeather(response);
+      });
+  }
+
   if (!process.env.NODE_ENV === 'development') {
     useEffect(() => {
-      const weatherURL = `https://api.openweathermap.org/data/2.5/weather?zip=60618,us&units=imperial&appid=${WEATHER_API_KEY}`;
-      setWeather('Loading Weather Info...');
+      getWeather();
       const updateEvery2Minute = setInterval(() => {
-        fetch(weatherURL)
-          .then((res) => res.json())
-          .then((response) => {
-            console.log(response);
-            setWeather(response);
-          });
-      }, 120000);
+        getWeather();
+      }, 1800000);
       return () => clearInterval(updateEvery2Minute);
     }, []);
   }
