@@ -75,7 +75,7 @@ function App() {
 
   const proxy = 'https://can-cors.herokuapp.com/';
 
-  if (process.env.NODE_ENV === 'production') {
+  if (!process.env.NODE_ENV === 'development') {
     useEffect(() => {
       const weatherURL = `https://api.openweathermap.org/data/2.5/weather?zip=60618,us&units=imperial&appid=${WEATHER_API_KEY}`;
       setWeather('Loading Weather Info...');
