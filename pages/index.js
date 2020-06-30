@@ -92,7 +92,7 @@ function App() {
   }
 
   useEffect(() => {
-    if (!process.env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV === 'production') {
       getWeather();
       const updateEvery2Minute = setInterval(() => {
         getWeather();
