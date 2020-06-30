@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { InputLabel, MenuItem, Select } from '@material-ui/core';
 import Trains from '../components/Trains';
 import Buses from '../components/Buses';
+import Time from '../components/Time';
 
 function App() {
   // REPLACE THIS WITH YOUR OWN API KEY
@@ -285,25 +286,28 @@ function App() {
             </div>
           ))}
         </div>
-        {!weather.main || weather.main.length ? (
-          ''
-        ) : (
-          <div className='weather'>
-            <div className='weather-icon'>
-              <img
-                src={`https://openweathermap.org/img/w/${weather.weather[0].icon}.png`}
-              />
-            </div>
-            <div className='weather-temp'>
-              {weather.main.temp}&deg;<span>F</span>
-              <br />
-              <div className='weather-temp-description'>
-                {weather.weather[0].description}
+
+        <div className='grid'>
+          <Time />
+          {!weather.main || weather.main.length ? (
+            ''
+          ) : (
+            <div className='weather'>
+              <div className='weather-icon'>
+                <img
+                  src={`https://openweathermap.org/img/w/${weather.weather[0].icon}.png`}
+                />
+              </div>
+              <div className='weather-temp'>
+                {weather.main.temp}&deg;<span>F</span>
+                <br />
+                <div className='weather-temp-description'>
+                  {weather.weather[0].description}
+                </div>
               </div>
             </div>
-          </div>
-        )}
-
+          )}
+        </div>
         <div className='grid'>
           <Trains stationName='Forest Park' stationNumber='30013' />
           <Trains stationName="O'Hare" stationNumber='30012' />
