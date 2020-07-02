@@ -37,11 +37,16 @@ export default function Trains(props) {
   }, []);
 
   return (
-    <div className='predictions trains'>
-      <h2 align='center'>{props.stationName} Trains</h2>
+    <div className={`predictions trains`}>
+      <h2 align='center'>
+        {props.stationName} Train{trains < 2 ? '' : 's'}
+      </h2>
       {trains ? (
         trains.map((train) => (
-          <div className='prediction' key={train.arrT}>
+          <div
+            className={`prediction ${cleanTime(train.arrT) < 2 ? 'due' : ''}`}
+            key={train.arrT}
+          >
             <p className='prediction-route-number'>
               {'To ' + train.destNm}
               <span className='prediction-route-number-direction'>
