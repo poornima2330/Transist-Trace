@@ -259,6 +259,11 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-evenly;
+
+    .time {
+      min-width: 44px;
+      text-align: center;
+    }
   }
 
   .weather {

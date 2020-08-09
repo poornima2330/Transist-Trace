@@ -1,5 +1,4 @@
-import React from 'react';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
 export default function Trains(props) {
   const TRAIN_API_KEY = process.env.NEXT_PUBLIC_CTA_TRAIN_API;

@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 
 export default function Timer() {
-  const [currentTime, setCurrentTime] = useState('Getting current time');
+  const [currentHour, setCurrentHour] = useState('Getting current hour');
+  const [currentMinute, setCurrentMinute] = useState('Getting current minute');
+  const [currentSecond, setCurrentSecond] = useState('Getting current second');
 
   useEffect(() => {
     startTime(), [];
@@ -15,8 +17,10 @@ export default function Timer() {
     m = checkTime(m);
     s = checkTime(s);
     var t = setTimeout(startTime, 500);
-    setCurrentTime(h + ':' + m + ':' + s);
-    return h + ':' + m + ':' + s;
+    setCurrentHour(h);
+    setCurrentMinute(m);
+    setCurrentSecond(s);
+    return `${h}:${m}:${s}`;
   }
 
   function checkTime(i) {
@@ -26,5 +30,11 @@ export default function Timer() {
     return i;
   }
 
-  return <div className='current-time'>{currentTime}</div>;
+  return (
+    <div className='current-time'>
+      <div className='time hour'>{currentHour}</div>:
+      <div className='time minute'>{currentMinute}</div>:
+      <div className='time minute'>{currentSecond}</div>
+    </div>
+  );
 }
