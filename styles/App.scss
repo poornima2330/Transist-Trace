@@ -284,6 +284,12 @@ body {
     }
   }
 
+  .food-schedule {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+  }
+
   .shortcuts {
     margin: 20px;
     display: flex;
