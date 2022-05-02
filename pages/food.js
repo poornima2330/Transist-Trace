@@ -43,34 +43,38 @@ export default function Food() {
       <Head>
         <title>Schedule</title>
       </Head>
-      <h1>Food Schedule</h1>
-      {!loading ? (
+      <br />
+      <h1>Local Schedule</h1>
+      {/* {!loading ? (
         <div className='food-schedule'>
           <div>Lunch: {schedule.Lunch}</div>
           <div>Dinner: {schedule.Dinner}</div>
         </div>
       ) : (
         "Loading"
-      )}
+      )} */}
       <div className='grid'>
-        <Trains stationName='Forest Park' stationNumber='30013' />
-        <Trains stationName="O'Hare" stationNumber='30012' />
+        <Trains stationName='Forest Park' stationNumber='30198' />
+        <Trains stationName="O'Hare" stationNumber='30197' />
 
         <Buses
-          stationName='Kimball South'
-          routeNumber='82'
-          stopNumber='11139'
+          stationName='Milwaukee South'
+          routeNumber='56'
+          stopNumber='5466'
         />
+        <Buses
+          stationName='Milwaukee North'
+          routeNumber='56'
+          stopNumber='5560'
+        />
+
+        <Buses stationName='Diversey East' routeNumber='76' stopNumber='5466' />
 
         <Buses
-          stationName='Kimball North'
-          routeNumber='82'
-          stopNumber='11271'
+          stationName='Diversey West'
+          routeNumber='76'
+          stopNumber='11068'
         />
-
-        <Buses stationName='Belmont East' routeNumber='77' stopNumber='9273' />
-
-        <Buses stationName='Belmont West' routeNumber='77' stopNumber='9314' />
       </div>
     </div>
   );
