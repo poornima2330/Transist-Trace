@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 
 export default function Trains(props) {
   const TRAIN_API_KEY = process.env.NEXT_PUBLIC_CTA_TRAIN_API;
@@ -6,7 +6,7 @@ export default function Trains(props) {
 
   async function trainTimes(data) {
     const TRAIN_API_URL = `https://can-cors.herokuapp.com/http://lapi.transitchicago.com/api/1.0/ttarrivals.aspx?key=${TRAIN_API_KEY}&stpid=${
-      props.stationNumber || '30012'
+      props.stationNumber || "30012"
     }&outputType=JSON`;
     const response = await fetch(TRAIN_API_URL);
     const trainData = await response.json();
@@ -14,13 +14,13 @@ export default function Trains(props) {
   }
 
   function cleanTime(data) {
-    const hourMinutes = data.split('T')[1];
+    const hourMinutes = data.split("T")[1];
     const today = new Date();
     const currentTime =
-      today.getHours() + ':' + today.getMinutes() + ':' + today.getSeconds();
+      today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
     const diff = Math.abs(
-      new Date('2020/10/09 ' + hourMinutes) -
-        new Date('2011/10/09 ' + currentTime)
+      new Date("2020/10/09 " + hourMinutes) -
+        new Date("2011/10/09 " + currentTime)
     );
     const minutes = Math.floor((diff / 1000 / 60) % 60);
 
@@ -38,29 +38,32 @@ export default function Trains(props) {
   return (
     <div className={`predictions trains`}>
       <h2 align='center'>
-        {props.stationName} Train{trains < 2 ? '' : 's'}
+        {props.stationName} Train{trains < 2 ? "" : "s"}
       </h2>
-      {trains ? (
+      {trains && trains.length ? (
         trains.map((train) => (
           <div
-            className={`prediction ${cleanTime(train.arrT) < 2 ? 'due' : ''}`}
+            className={`prediction ${cleanTime(train.arrT) < 2 ? "due" : ""}`}
             key={train.arrT}
           >
             <p className='prediction-route-number'>
-              {'To ' + train.destNm}
+              {"To " + train.destNm}
               <span className='prediction-route-number-direction'>
                 {train.staNm} Station
               </span>
             </p>
             <p className='prediction-time'>
               {cleanTime(train.arrT) < 2
-                ? 'Due'
+                ? "Due"
                 : cleanTime(train.arrT) + ` mins`}
             </p>
           </div>
         ))
       ) : (
-        <div className='prediction'>Loading...</div>
+        <>
+          <div className='prediction loading' />
+          <div className='prediction loading' />
+        </>
       )}
     </div>
   );

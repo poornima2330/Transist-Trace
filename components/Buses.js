@@ -1,5 +1,5 @@
-import React from 'react';
-import { useState, useEffect } from 'react';
+import React from "react";
+import { useState, useEffect } from "react";
 
 export default function Buses(props) {
   const API_KEY = process.env.NEXT_PUBLIC_CTA_BUS_API;
@@ -10,8 +10,8 @@ export default function Buses(props) {
     const response = await fetch(BUS_API_URL);
     console.log(BUS_API_URL);
     const busData = await response.json();
-    setBuses(busData['bustime-response'].prd);
-    console.log('new bus times fetched');
+    setBuses(busData["bustime-response"].prd);
+    console.log("new bus times fetched");
   }
 
   useEffect(() => {
@@ -25,11 +25,11 @@ export default function Buses(props) {
   return (
     <div className='predictions buses'>
       <h2 align='center'>{props.stationName} Buses</h2>
-      {buses ? (
+      {buses && buses.length ? (
         buses.map((bus) => (
           <div className='prediction' key={bus.prdctdn}>
             <p className='prediction-route-number'>
-              {bus.rt + ' To ' + bus.des}
+              {bus.rt + " To " + bus.des}
               <span className='prediction-route-number-direction'>
                 {bus.rtdir}
               </span>
@@ -40,7 +40,10 @@ export default function Buses(props) {
           </div>
         ))
       ) : (
-        <div className='prediction'>No Buses</div>
+        <>
+          <div className='prediction loading' />
+          <div className='prediction loading' />
+        </>
       )}
     </div>
   );
