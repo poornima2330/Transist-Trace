@@ -4,11 +4,16 @@ export default function Trains(props) {
   const TRAIN_API_KEY = process.env.NEXT_PUBLIC_CTA_TRAIN_API;
   const [trains, setTrains] = useState([]);
 
+  const proxy = "https://cors-anywhere.herokuapp.com/";
+
   async function trainTimes(data) {
-    const TRAIN_API_URL = `https://can-cors.herokuapp.com/http://lapi.transitchicago.com/api/1.0/ttarrivals.aspx?key=${TRAIN_API_KEY}&stpid=${
       props.stationNumber || "30012"
     }&outputType=JSON`;
-    const response = await fetch(TRAIN_API_URL);
+    const response = await fetch(TRAIN_API_URL, {
+      method: "GET",
+      body: JSON.stringify(data),
+    });
+
     const trainData = await response.json();
     setTrains(trainData.ctatt.eta);
   }

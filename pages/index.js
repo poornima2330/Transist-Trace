@@ -1,10 +1,10 @@
-import React from 'react';
-import Head from 'next/head';
-import { useState, useEffect } from 'react';
-import { InputLabel, MenuItem, Select } from '@material-ui/core';
-import Trains from '../components/Trains';
-import Buses from '../components/Buses';
-import Time from '../components/Time';
+import React from "react";
+import Head from "next/head";
+import { useState, useEffect } from "react";
+import { InputLabel, MenuItem, Select } from "@material-ui/core";
+import Trains from "../components/Trains";
+import Buses from "../components/Buses";
+import Time from "../components/Time";
 
 function App() {
   // REPLACE THIS WITH YOUR OWN API KEY
@@ -12,13 +12,13 @@ function App() {
   const WEATHER_API_KEY = process.env.NEXT_PUBLIC_WEATHER_API_KEY;
 
   const [routes, setRoutes] = useState([]);
-  const [selectedRoute, setSelectedRoute] = useState('');
+  const [selectedRoute, setSelectedRoute] = useState("");
 
   const [directions, setDirections] = useState([]);
-  const [selectedDirection, setSelectedDirection] = useState('');
+  const [selectedDirection, setSelectedDirection] = useState("");
 
   const [stops, setStops] = useState([]);
-  const [selectedStop, setSelectedStop] = useState('');
+  const [selectedStop, setSelectedStop] = useState("");
 
   const [predictions, setPredictions] = useState([]);
 
@@ -27,12 +27,12 @@ function App() {
     weather: [
       {
         id: 501,
-        main: 'Rain',
-        description: 'Always sunny in Philly',
-        icon: '10d',
+        main: "Rain",
+        description: "Always sunny in Philly",
+        icon: "10d",
       },
     ],
-    base: 'stations',
+    base: "stations",
     main: {
       temp: 42,
       feels_like: 77.76,
@@ -43,47 +43,47 @@ function App() {
     },
     visibility: 16093,
     wind: { speed: 11.41, deg: 210 },
-    rain: { '1h': 2.54 },
+    rain: { "1h": 2.54 },
     clouds: { all: 75 },
     dt: 1593466811,
     sys: {
       type: 1,
       id: 4861,
-      country: 'US',
+      country: "US",
       sunrise: 1593425902,
       sunset: 1593480607,
     },
     timezone: -18000,
     id: 0,
-    name: 'Chicago',
+    name: "Chicago",
     cod: 200,
   });
 
   const handleRouteSelect = (e) => {
     setSelectedRoute(e.target.value);
-    setSelectedDirection('');
-    setSelectedStop('');
-    console.log('selected route: ' + e.target.value);
+    setSelectedDirection("");
+    setSelectedStop("");
+    console.log("selected route: " + e.target.value);
   };
 
   const handleDirectionSelect = (e) => {
     setSelectedDirection(e.target.value);
-    setSelectedStop('');
-    console.log('selected Direction ' + e.target.value);
+    setSelectedStop("");
+    console.log("selected Direction " + e.target.value);
   };
 
   const handleStopSelect = (e) => {
     setSelectedStop(e.target.value);
-    console.log('selected stop: ' + e.target.value);
+    console.log("selected stop: " + e.target.value);
   };
 
   const popularBusRoutes = [4, 9, 77];
 
-  const proxy = 'https://can-cors.herokuapp.com/';
+  const proxy = "https://cors-anywhere.herokuapp.com/";
 
   async function getWeather() {
-    const weatherURL = `https://api.openweathermap.org/data/2.5/weather?zip=60618,us&units=imperial&appid=${WEATHER_API_KEY}`;
-    setWeather('Loading Weather Info...');
+    const weatherURL = `${proxy}https://api.openweathermap.org/data/2.5/weather?zip=60618,us&units=imperial&appid=${WEATHER_API_KEY}`;
+    setWeather("Loading Weather Info...");
     fetch(weatherURL)
       .then((res) => res.json())
       .then((response) => {
@@ -93,7 +93,7 @@ function App() {
   }
 
   useEffect(() => {
-    if (process.env.NODE_ENV === 'production') {
+    if (process.env.NODE_ENV === "production") {
       getWeather();
       const updateEvery2Minute = setInterval(() => {
         getWeather();
@@ -104,35 +104,33 @@ function App() {
 
   useEffect(() => {
     let baseURI =
-      proxy +
-      'http://ctabustracker.com/bustime/api/v2/getroutes?key=' +
+      "http://ctabustracker.com/bustime/api/v2/getroutes?key=" +
       API_KEY +
-      '&format=json';
-    console.log('fetching routes', baseURI);
+      "&format=json";
+    console.log("fetching routes", baseURI);
     fetch(baseURI)
       .then((res) => res.json())
       .then((response) => {
-        setRoutes(response['bustime-response']['routes']);
+        setRoutes(response["bustime-response"]["routes"]);
       })
       .catch();
   }, []);
 
   useEffect(() => {
     if (selectedRoute) {
-      console.log('fetching directions');
+      console.log("fetching directions");
 
       let baseURI =
-        proxy +
-        'http://ctabustracker.com/bustime/api/v2/getdirections?key=' +
+        "http://ctabustracker.com/bustime/api/v2/getdirections?key=" +
         API_KEY +
-        '&rt=' +
+        "&rt=" +
         selectedRoute +
-        '&format=json';
+        "&format=json";
 
       fetch(baseURI)
         .then((res) => res.json())
         .then((response) => {
-          setDirections(response['bustime-response']['directions']);
+          setDirections(response["bustime-response"]["directions"]);
         })
         .catch();
     }
@@ -140,33 +138,31 @@ function App() {
 
   useEffect(() => {
     if (selectedDirection) {
-      console.log('fetching stops');
+      console.log("fetching stops");
 
       let baseURI =
-        proxy +
-        'http://ctabustracker.com/bustime/api/v2/getstops?key=' +
+        "http://ctabustracker.com/bustime/api/v2/getstops?key=" +
         API_KEY +
-        '&rt=' +
+        "&rt=" +
         selectedRoute +
-        '&dir=' +
+        "&dir=" +
         selectedDirection +
-        '&format=json';
+        "&format=json";
 
       let baseURI2 =
-        proxy +
-        'http://ctabustracker.com/bustime/api/v2/getstops?key=' +
+        "http://ctabustracker.com/bustime/api/v2/getstops?key=" +
         API_KEY +
-        '&rt=' +
+        "&rt=" +
         selectedRoute +
-        '&dir=' +
+        "&dir=" +
         directions[1] +
-        '&format=json';
+        "&format=json";
 
       fetch(baseURI)
         .then((res) => res.json())
         .then((response) => {
-          setStops(response['bustime-response']['stops']);
-          console.log('STTAAAHPPS', response['bustime-response']['stops']);
+          setStops(response["bustime-response"]["stops"]);
+          console.log("STTAAAHPPS", response["bustime-response"]["stops"]);
         })
         .catch();
 
@@ -184,23 +180,22 @@ function App() {
 
   useEffect(() => {
     if (selectedStop) {
-      console.log('fetching predictions', selectedStop);
+      console.log("fetching predictions", selectedStop);
 
       let baseURI =
-        proxy +
-        'http://ctabustracker.com/bustime/api/v2/getpredictions?key=' +
+        "http://ctabustracker.com/bustime/api/v2/getpredictions?key=" +
         API_KEY +
-        '&rt=' +
+        "&rt=" +
         selectedRoute +
-        '&stpid=' +
+        "&stpid=" +
         selectedStop +
-        '&format=json';
+        "&format=json";
 
       fetch(baseURI)
         .then((res) => res.json())
         .then((response) => {
-          if (response['bustime-response']['prd'])
-            setPredictions(response['bustime-response']['prd']);
+          if (response["bustime-response"]["prd"])
+            setPredictions(response["bustime-response"]["prd"]);
           else setPredictions([]);
         })
         .catch(setPredictions([]));
@@ -238,7 +233,7 @@ function App() {
             >
               {routes.map((item, index) => (
                 <MenuItem value={item.rt} key={item.rt}>
-                  {item.rt}. {item.rtnm}{' '}
+                  {item.rt}. {item.rtnm}{" "}
                 </MenuItem>
               ))}
             </Select>
@@ -272,7 +267,7 @@ function App() {
             >
               {stops.map((item, index) => (
                 <MenuItem value={item.stpid} key={item.stpid}>
-                  {item.stpnm}{' '}
+                  {item.stpnm}{" "}
                 </MenuItem>
               ))}
             </Select>
@@ -290,7 +285,7 @@ function App() {
         <div className='grid'>
           <Time />
           {!weather.main || weather.main.length ? (
-            ''
+            ""
           ) : (
             <div className='weather'>
               <div className='weather-icon'>
@@ -338,22 +333,22 @@ function App() {
         </div>
         <div className='predictions'>
           <h2 align='center'>Bus Times</h2>
-          <ul style={{ listStyle: 'none' }}>
+          <ul style={{ listStyle: "none" }}>
             {predictions.length > 0 ? (
               predictions.map((item, index) => (
                 <li className={item.rtprdctdn}>
                   <div className='prediction'>
                     <p className='prediction-route-number'>
-                      {item.rt + ' to ' + item.des}
+                      {item.rt + " to " + item.des}
                       <span className='prediction-route-number-direction'>
                         {item.rtdir}
                       </span>
                     </p>
                     <p className='prediction-time'>
-                      {' ' +
+                      {" " +
                         (isNaN(item.prdctdn)
                           ? item.prdctdn
-                          : item.prdctdn + ' min')}
+                          : item.prdctdn + " min")}
                     </p>
                   </div>
                 </li>
