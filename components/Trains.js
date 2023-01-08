@@ -7,6 +7,7 @@ export default function Trains(props) {
   const proxy = "https://cors-anywhere.herokuapp.com/";
 
   async function trainTimes(data) {
+    const TRAIN_API_URL = `${proxy}https://lapi.transitchicago.com/api/1.0/ttarrivals.aspx?key=${TRAIN_API_KEY}&stpid=${
       props.stationNumber || "30012"
     }&outputType=JSON`;
     const response = await fetch(TRAIN_API_URL, {
