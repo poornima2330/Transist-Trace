@@ -1,23 +1,15 @@
-import React, { useState, useEffect } from "react";
+import useSWR from "swr";
+import fetcher from "../lib/fetcher";
 
 export default function Trains(props) {
-  const TRAIN_API_KEY = process.env.NEXT_PUBLIC_CTA_TRAIN_API;
-  const [trains, setTrains] = useState([]);
+  const { data, error, isLoading } = useSWR(
+    `/api/trains?stationNumber=${props.stationNumber}`,
+    fetcher
+  );
+  if (error) return <div>failed to load</div>;
+  if (isLoading) return <div>Loading...</div>;
 
-  const proxy = "https://cors-anywhere.herokuapp.com/";
-
-  async function trainTimes(data) {
-    const TRAIN_API_URL = `${proxy}https://lapi.transitchicago.com/api/1.0/ttarrivals.aspx?key=${TRAIN_API_KEY}&stpid=${
-      props.stationNumber || "30012"
-    }&outputType=JSON`;
-    const response = await fetch(TRAIN_API_URL, {
-      method: "GET",
-      body: JSON.stringify(data),
-    });
-
-    const trainData = await response.json();
-    setTrains(trainData.ctatt.eta);
-  }
+  const trains = data.ctatt.eta;
 
   function cleanTime(data) {
     const hourMinutes = data.split("T")[1];
@@ -33,13 +25,13 @@ export default function Trains(props) {
     return minutes;
   }
 
-  useEffect(() => {
-    trainTimes();
-    const updateEveryMinute = setInterval(() => {
-      trainTimes();
-    }, 30000);
-    return () => clearInterval(updateEveryMinute);
-  }, []);
+  // useEffect(() => {
+  //   trainTimes();
+  //   // const updateEveryMinute = setInterval(() => {
+  //   //   trainTimes();
+  //   // }, 30000);
+  //   // return () => clearInterval(updateEveryMinute);
+  // }, []);
 
   return (
     <div className={`predictions trains`}>

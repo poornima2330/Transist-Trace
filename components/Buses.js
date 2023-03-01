@@ -1,31 +1,15 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import useSWR from "swr";
+import fetcher from "../lib/fetcher";
 
 export default function Buses(props) {
-  const API_KEY = process.env.NEXT_PUBLIC_CTA_BUS_API;
-  const [buses, setBuses] = useState([]);
+  const { data, error, isLoading } = useSWR(
+    `/api/buses?routeNumber=${props.routeNumber}&stopNumber=${props.stopNumber}`,
+    fetcher
+  );
+  if (error) return <div>failed to load</div>;
+  if (isLoading) return <div>Loading...</div>;
 
-  const proxy = "https://cors-anywhere.herokuapp.com/";
-
-  async function busTimes(data) {
-    const BUS_API_URL = `${proxy}http://ctabustracker.com/bustime/api/v2/getpredictions?key=${API_KEY}&rt=${props.routeNumber}&stpid=${props.stopNumber}&format=json`;
-
-    const response = await fetch(BUS_API_URL, {
-      method: "GET",
-    });
-
-    const busData = await response.json();
-    setBuses(busData["bustime-response"].prd);
-    console.log("new bus times fetched");
-  }
-
-  useEffect(() => {
-    busTimes();
-    const updateEveryMinute = setInterval(() => {
-      busTimes();
-    }, 30000);
-    return () => clearInterval(updateEveryMinute);
-  }, []);
+  const buses = data["bustime-response"].prd;
 
   return (
     <div className='predictions buses'>
