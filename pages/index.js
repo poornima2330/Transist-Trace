@@ -206,7 +206,7 @@ function App() {
   return (
     <div className='App'>
       <Head>
-        <title>CTA Tracker for Avondale, Chicago IL</title>
+        <title>CTA Tracker for Logan Square, Chicago IL</title>
         <link rel='icon' type='image/png' href='/favicon.png' />
       </Head>
       <div className='header'>CTA Bus Tracker</div>

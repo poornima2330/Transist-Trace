@@ -165,6 +165,15 @@ body {
       flex-direction: row;
       justify-content: space-between;
       align-items: center;
+      
+
+      &.red {
+        background-color: #C60E30;
+      }
+
+      &.brown {
+        background-color: #A95A02;
+      }
 
       &.loading {
         background-color: $light-gray;
