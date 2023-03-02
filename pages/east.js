@@ -7,6 +7,7 @@ export default function East() {
     <div className='main'>
       <Head>
         <title>East Side Schedule</title>
+        <link rel='icon' type='image/png' href='/favicon.png' />
       </Head>
       <br />
       <h1>Local Schedule</h1>

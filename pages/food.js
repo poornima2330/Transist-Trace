@@ -1,13 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Head from "next/head";
 import Buses from "../components/Buses";
 import Trains from "../components/Trains";
 
 export default function Food() {
+  useEffect(() => {
+    async function fetchData() {
+      await fetch("/api/getSheetData")
+        .then((res) => res.json())
+        .then((data) => console.log("res", data));
+    }
+    fetchData();
+  }, []);
   return (
     <div className='main food'>
       <Head>
         <title>Schedule</title>
+        <link rel='icon' type='image/png' href='/favicon.png' />
       </Head>
       <br />
       <h1>Local Schedule</h1>

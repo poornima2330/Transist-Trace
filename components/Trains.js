@@ -38,26 +38,32 @@ export default function Trains(props) {
       <h2 align='center'>
         {props.stationName} Train{trains < 2 ? "" : "s"}
       </h2>
-      {trains.map((train) => (
-        <div
-          className={`prediction ${props.color} ${
-            cleanTime(train.arrT) < 2 ? "due" : ""
-          }`}
-          key={train.arrT}
-        >
-          <p className='prediction-route-number'>
-            {"To " + train.destNm}
-            <span className='prediction-route-number-direction'>
-              {train.staNm} Station
-            </span>
-          </p>
-          <p className='prediction-time'>
-            {cleanTime(train.arrT) < 2
-              ? "Due"
-              : cleanTime(train.arrT) + ` mins`}
-          </p>
+      {trains ? (
+        trains.map((train) => (
+          <div
+            className={`prediction ${props.color} ${
+              cleanTime(train.arrT) < 2 ? "due" : ""
+            }`}
+            key={train.arrT}
+          >
+            <p className='prediction-route-number'>
+              {"To " + train.destNm}
+              <span className='prediction-route-number-direction'>
+                {train.staNm} Station
+              </span>
+            </p>
+            <p className='prediction-time'>
+              {cleanTime(train.arrT) < 2
+                ? "Due"
+                : cleanTime(train.arrT) + ` mins`}
+            </p>
+          </div>
+        ))
+      ) : (
+        <div className={`prediction`}>
+          <p className='prediction-route-number'>No Train Online</p>
         </div>
-      ))}
+      )}
     </div>
   );
 }

@@ -22,26 +22,32 @@ export default function Buses(props) {
   return (
     <div className='predictions buses'>
       <h2 align='center'>{props.stationName} Buses</h2>
-      {buses.map((bus) => (
-        <div
-          className={`prediction ${
-            isNaN(bus.prdctdn)
-              ? bus.prdctdn.toLowerCase()
-              : `${bus.prdctdn} mins`
-          }`}
-          key={bus.prdctdn}
-        >
-          <p className='prediction-route-number'>
-            {bus.rt + " To " + bus.des}
-            <span className='prediction-route-number-direction'>
-              {bus.rtdir}
-            </span>
-          </p>
-          <p className='prediction-time'>
-            {isNaN(bus.prdctdn) ? bus.prdctdn : `${bus.prdctdn} mins`}
-          </p>
+      {buses ? (
+        buses.map((bus) => (
+          <div
+            className={`prediction ${
+              isNaN(bus.prdctdn)
+                ? bus.prdctdn.toLowerCase()
+                : `${bus.prdctdn} mins`
+            }`}
+            key={bus.prdctdn}
+          >
+            <p className='prediction-route-number'>
+              {bus.rt + " To " + bus.des}
+              <span className='prediction-route-number-direction'>
+                {bus.rtdir}
+              </span>
+            </p>
+            <p className='prediction-time'>
+              {isNaN(bus.prdctdn) ? bus.prdctdn : `${bus.prdctdn} mins`}
+            </p>
+          </div>
+        ))
+      ) : (
+        <div className={`prediction`}>
+          <p className='prediction-route-number'>No Bus Online</p>
         </div>
-      ))}
+      )}
     </div>
   );
 }
