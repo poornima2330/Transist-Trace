@@ -2,8 +2,6 @@ import React from "react";
 import Head from "next/head";
 import { useState, useEffect } from "react";
 import { InputLabel, MenuItem, Select } from "@material-ui/core";
-import Trains from "../components/Trains";
-import Buses from "../components/Buses";
 import Time from "../components/Time";
 
 function App() {
