@@ -7,10 +7,6 @@ import Buses from "../components/Buses";
 import Time from "../components/Time";
 
 function App() {
-  // REPLACE THIS WITH YOUR OWN API KEY
-  const API_KEY = process.env.NEXT_PUBLIC_CTA_BUS_API;
-  const WEATHER_API_KEY = process.env.NEXT_PUBLIC_WEATHER_API_KEY;
-
   const [routes, setRoutes] = useState([]);
   const [selectedRoute, setSelectedRoute] = useState("");
 
@@ -34,7 +30,7 @@ function App() {
     ],
     base: "stations",
     main: {
-      temp: 42,
+      temp: 42.73,
       feels_like: 77.76,
       temp_min: 77,
       temp_max: 86,
@@ -63,31 +59,23 @@ function App() {
     setSelectedRoute(e.target.value);
     setSelectedDirection("");
     setSelectedStop("");
-    console.log("selected route: " + e.target.value);
   };
 
   const handleDirectionSelect = (e) => {
     setSelectedDirection(e.target.value);
     setSelectedStop("");
-    console.log("selected Direction " + e.target.value);
   };
 
   const handleStopSelect = (e) => {
     setSelectedStop(e.target.value);
-    console.log("selected stop: " + e.target.value);
   };
 
   const popularBusRoutes = [4, 9, 77];
 
-  const proxy = "https://cors-anywhere.herokuapp.com/";
-
   async function getWeather() {
-    const weatherURL = `${proxy}https://api.openweathermap.org/data/2.5/weather?zip=60618,us&units=imperial&appid=${WEATHER_API_KEY}`;
-    setWeather("Loading Weather Info...");
-    fetch(weatherURL)
+    fetch(`/api/weather?zip=${"60647"}`)
       .then((res) => res.json())
       .then((response) => {
-        console.log(response);
         setWeather(response);
       });
   }
@@ -103,12 +91,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    let baseURI =
-      "http://ctabustracker.com/bustime/api/v2/getroutes?key=" +
-      API_KEY +
-      "&format=json";
-    console.log("fetching routes", baseURI);
-    fetch(baseURI)
+    fetch("/api/getBusRoutes")
       .then((res) => res.json())
       .then((response) => {
         setRoutes(response["bustime-response"]["routes"]);
@@ -118,16 +101,7 @@ function App() {
 
   useEffect(() => {
     if (selectedRoute) {
-      console.log("fetching directions");
-
-      let baseURI =
-        "http://ctabustracker.com/bustime/api/v2/getdirections?key=" +
-        API_KEY +
-        "&rt=" +
-        selectedRoute +
-        "&format=json";
-
-      fetch(baseURI)
+      fetch(`/api/getBusDirection?selectedRoute=${selectedRoute}`)
         .then((res) => res.json())
         .then((response) => {
           setDirections(response["bustime-response"]["directions"]);
@@ -138,60 +112,22 @@ function App() {
 
   useEffect(() => {
     if (selectedDirection) {
-      console.log("fetching stops");
-
-      let baseURI =
-        "http://ctabustracker.com/bustime/api/v2/getstops?key=" +
-        API_KEY +
-        "&rt=" +
-        selectedRoute +
-        "&dir=" +
-        selectedDirection +
-        "&format=json";
-
-      let baseURI2 =
-        "http://ctabustracker.com/bustime/api/v2/getstops?key=" +
-        API_KEY +
-        "&rt=" +
-        selectedRoute +
-        "&dir=" +
-        directions[1] +
-        "&format=json";
-
-      fetch(baseURI)
+      fetch(
+        `/api/getBusStops?selectedRoute=${selectedRoute}&selectedDirection=${selectedDirection}`
+      )
         .then((res) => res.json())
         .then((response) => {
           setStops(response["bustime-response"]["stops"]);
-          console.log("STTAAAHPPS", response["bustime-response"]["stops"]);
         })
         .catch();
-
-      //   const direction2 = fetch(baseURI2)
-      //   .then(res => res.json())
-      //   .then(response => {
-      //     setStops(response["bustime-response"]["stops"]);
-      //     console.log('STTAAAHPPS', response["bustime-response"]["stops"])
-      //   })
-      //   .catch();
-
-      // console.log('direction2', direction2);
     }
   }, [selectedDirection, selectedRoute]);
 
   useEffect(() => {
     if (selectedStop) {
-      console.log("fetching predictions", selectedStop);
-
-      let baseURI =
-        "http://ctabustracker.com/bustime/api/v2/getpredictions?key=" +
-        API_KEY +
-        "&rt=" +
-        selectedRoute +
-        "&stpid=" +
-        selectedStop +
-        "&format=json";
-
-      fetch(baseURI)
+      fetch(
+        `/api/getBusPredictions?selectedRoute=${selectedRoute}&selectedStop=${selectedStop}`
+      )
         .then((res) => res.json())
         .then((response) => {
           if (response["bustime-response"]["prd"])
@@ -200,13 +136,12 @@ function App() {
         })
         .catch(setPredictions([]));
     }
-    console.log(selectedDirection, selectedRoute, selectedStop);
   }, [selectedDirection, selectedRoute, selectedStop]);
 
   return (
     <div className='App'>
       <Head>
-        <title>CTA Tracker for Logan Square, Chicago IL</title>
+        <title>CTA Bus Tracker for Chicago IL</title>
         <link rel='icon' type='image/png' href='/favicon.png' />
       </Head>
       <div className='header'>CTA Bus Tracker</div>
@@ -294,7 +229,7 @@ function App() {
                 />
               </div>
               <div className='weather-temp'>
-                {weather.main.temp}&deg;<span>F</span>
+                {Math.floor(weather.main.temp)}&deg;<span>F</span>
                 <br />
                 <div className='weather-temp-description'>
                   {weather.weather[0].description}
@@ -303,40 +238,13 @@ function App() {
             </div>
           )}
         </div>
-        <div className='grid'>
-          <Trains stationName='Forest Park' stationNumber='30013' />
-          <Trains stationName="O'Hare" stationNumber='30012' />
 
-          <Buses
-            stationName='Kimball South'
-            routeNumber='82'
-            stopNumber='11139'
-          />
-
-          <Buses
-            stationName='Kimball North'
-            routeNumber='82'
-            stopNumber='11271'
-          />
-
-          <Buses
-            stationName='Belmont East'
-            routeNumber='77'
-            stopNumber='9273'
-          />
-
-          <Buses
-            stationName='Belmont West'
-            routeNumber='77'
-            stopNumber='9314'
-          />
-        </div>
         <div className='predictions'>
           <h2 align='center'>Bus Times</h2>
           <ul style={{ listStyle: "none" }}>
             {predictions.length > 0 ? (
               predictions.map((item, index) => (
-                <li className={item.rtprdctdn}>
+                <li className={item.rtprdctdn} key={index}>
                   <div className='prediction'>
                     <p className='prediction-route-number'>
                       {item.rt + " to " + item.des}
