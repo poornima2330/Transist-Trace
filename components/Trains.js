@@ -21,14 +21,8 @@ export default function Trains(props) {
   console.log(data);
 
   function cleanTime(data) {
-    const hourMinutes = data.split("T")[1];
     const today = new Date();
-    const currentTime =
-      today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-    const diff = Math.abs(
-      new Date("2020/10/09 " + hourMinutes) -
-        new Date("2011/10/09 " + currentTime)
-    );
+    const diff = Math.abs(new Date(data).getTime() - today.getTime());
     const minutes = Math.floor((diff / 1000 / 60) % 60);
 
     return minutes;
