@@ -5,7 +5,7 @@ export default function Trains(props) {
   const { data, error, isLoading } = useSWR(
     `/api/trains?stationNumber=${props.stationNumber}`,
     fetcher,
-    { refreshInterval: 30000, refreshWhenHidden: true }
+    { refreshInterval: 30000 }
   );
   if (error) return <div>failed to load</div>;
   if (isLoading)
