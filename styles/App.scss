@@ -203,6 +203,7 @@ body {
         font-size: 22px;
         display: flex;
         flex-direction: column;
+        word-break: break-all;
 
         &-direction {
           font-size: 15px;

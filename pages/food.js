@@ -21,8 +21,8 @@ export default function Food() {
       <br />
       <h1>Local Schedule</h1>
       <div className='grid'>
-        <Trains stationName='Forest Park' stationNumber='30198' />
-        <Trains stationName="O'Hare" stationNumber='30197' />
+        <Trains stationNumber='30198' />
+        <Trains stationNumber='30197' />
 
         <Buses
           stationName='Milwaukee South'

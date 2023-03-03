@@ -5,19 +5,20 @@ export default function Trains(props) {
   const { data, error, isLoading } = useSWR(
     `/api/trains?stationNumber=${props.stationNumber}`,
     fetcher,
-    { refreshInterval: 30000 }
+    { refreshInterval: 30000, refreshWhenHidden }
   );
   if (error) return <div>failed to load</div>;
   if (isLoading)
     return (
       <div className={`predictions trains`}>
-        <h2 align='center'>{props.stationName} Trains</h2>
+        <h2 align='center'>Trains</h2>
         <div className='prediction loading' />
         <div className='prediction loading' />
       </div>
     );
 
   const trains = data.ctatt.eta;
+  console.log(data);
 
   function cleanTime(data) {
     const hourMinutes = data.split("T")[1];
@@ -36,7 +37,8 @@ export default function Trains(props) {
   return (
     <div className={`predictions trains`}>
       <h2 align='center'>
-        {props.stationName} Train{trains < 2 ? "" : "s"}
+        {data.ctatt.eta ? data.ctatt.eta[0].stpDe : null} Train
+        {trains < 2 ? "" : "s"}
       </h2>
       {trains ? (
         trains.map((train) => (

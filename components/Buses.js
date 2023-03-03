@@ -11,17 +11,25 @@ export default function Buses(props) {
   if (isLoading)
     return (
       <div className={`predictions buses`}>
-        <h2 align='center'>{props.stationName} Trains</h2>
+        <h2 align='center'>Buses</h2>
         <div className='prediction loading' />
         <div className='prediction loading' />
       </div>
     );
 
+  console.log(data);
+
   const buses = data["bustime-response"].prd;
 
   return (
     <div className='predictions buses'>
-      <h2 align='center'>{props.stationName} Buses</h2>
+      <h2 align='center'>
+        {buses
+          ? `${buses[0].rt} ${buses[0].rtdir} Bus${
+              buses.length > 1 ? "es" : ""
+            }`
+          : null}
+      </h2>
       {buses ? (
         buses.map((bus) => (
           <div
@@ -35,7 +43,7 @@ export default function Buses(props) {
             <p className='prediction-route-number'>
               {bus.rt + " To " + bus.des}
               <span className='prediction-route-number-direction'>
-                {bus.rtdir}
+                {bus.stpnm}
               </span>
             </p>
             <p className='prediction-time'>
@@ -44,7 +52,7 @@ export default function Buses(props) {
           </div>
         ))
       ) : (
-        <div className={`prediction`}>
+        <div className={`prediction loading`}>
           <p className='prediction-route-number'>No Bus Online</p>
         </div>
       )}
