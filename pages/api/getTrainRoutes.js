@@ -1,7 +1,7 @@
-import { getTrainLocations } from "../../lib/ctatracker";
+import { getTrainStops } from "../../lib/ctatracker";
 
 export default async function handler(req, res) {
-  const response = await getTrainLocations(req.query.route);
+  const response = await getTrainStops(req.query.route);
   const info = await response.json();
 
   res.setHeader(

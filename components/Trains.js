@@ -18,7 +18,6 @@ export default function Trains(props) {
     );
 
   const trains = data.ctatt.eta;
-  console.log(data);
 
   function cleanTime(data) {
     const today = new Date();
@@ -32,12 +31,12 @@ export default function Trains(props) {
     <div className={`predictions trains`}>
       <h2 align='center'>
         {data.ctatt.eta ? data.ctatt.eta[0].stpDe : null} Train
-        {trains < 2 ? "" : "s"}
+        {trains && trains.length < 2 ? "" : "s"}
       </h2>
       {trains ? (
         trains.map((train) => (
           <div
-            className={`prediction ${props.color} ${
+            className={`prediction ${train.rt.toLowerCase()} ${
               cleanTime(train.arrT) < 2 ? "due" : ""
             }`}
             key={train.arrT}
@@ -56,7 +55,7 @@ export default function Trains(props) {
           </div>
         ))
       ) : (
-        <div className={`prediction`}>
+        <div className={`prediction loading`}>
           <p className='prediction-route-number'>No Train Online</p>
         </div>
       )}

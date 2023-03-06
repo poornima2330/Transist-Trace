@@ -9,15 +9,20 @@ export default function TrainPage() {
 
   const { data, error, isLoading } = useSWR(
     `/api/getTrainRoutes?route=${route}`,
-    fetcher
+    fetcher,
+    { refreshInterval: 30000 }
   );
-  if (error) return <div>failed to load</div>;
+  if (error || !route || !stationNumber) return <div>failed to load</div>;
   if (isLoading)
     return (
-      <div className={`predictions buses`}>
-        <h2 align='center'>Buses</h2>
-        <div className='prediction loading' />
-        <div className='prediction loading' />
+      <div className='main'>
+        <div className='grid'>
+          <div className={`predictions buses`}>
+            <h2 align='center'>Loading...</h2>
+            <div className='prediction loading' />
+            <div className='prediction loading' />
+          </div>
+        </div>
       </div>
     );
 

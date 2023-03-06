@@ -1,10 +1,12 @@
 import React from "react";
 import Head from "next/head";
+import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import { InputLabel, MenuItem, Select } from "@material-ui/core";
 import Time from "../components/Time";
 
 function App() {
+  const router = useRouter();
   const [routes, setRoutes] = useState([]);
   const [selectedRoute, setSelectedRoute] = useState("");
 
@@ -13,8 +15,23 @@ function App() {
 
   const [stops, setStops] = useState([]);
   const [selectedStop, setSelectedStop] = useState("");
-
   const [predictions, setPredictions] = useState([]);
+
+  const train_routes = [
+    "red",
+    "blue",
+    "g",
+    "brn",
+    "p",
+    "pexp",
+    "y",
+    "pnk",
+    "o",
+  ];
+  const [selectedTrainRoute, setSelectedTrainRoute] = useState("");
+
+  const [trainStops, setTrainStops] = useState([]);
+  const [selectedTrainStop, setSelectedTrainStop] = useState("");
 
   const [weather, setWeather] = useState({
     coord: { lon: -87.7, lat: 41.95 },
@@ -53,6 +70,17 @@ function App() {
     cod: 200,
   });
 
+  const handleTrainRouteSelect = (e) => {
+    setSelectedTrainRoute(e.target.value);
+    setSelectedDirection("");
+    setSelectedStop("");
+  };
+
+  const handleTrainStopSelect = (e) => {
+    setSelectedTrainStop(e.target.value);
+    console.log(e.target.value);
+  };
+
   const handleRouteSelect = (e) => {
     setSelectedRoute(e.target.value);
     setSelectedDirection("");
@@ -67,8 +95,6 @@ function App() {
   const handleStopSelect = (e) => {
     setSelectedStop(e.target.value);
   };
-
-  const popularBusRoutes = [4, 9, 77];
 
   async function getWeather() {
     fetch(`/api/weather?zip=${"60647"}`)
@@ -106,7 +132,15 @@ function App() {
         })
         .catch();
     }
-  }, [selectedRoute]);
+    if (selectedTrainRoute) {
+      fetch(`/api/getTrainRoutes?route=${selectedTrainRoute}`)
+        .then((res) => res.json())
+        .then((response) => {
+          setTrainStops(response);
+        })
+        .catch();
+    }
+  }, [selectedRoute, selectedTrainRoute]);
 
   useEffect(() => {
     if (selectedDirection) {
@@ -134,7 +168,13 @@ function App() {
         })
         .catch(setPredictions([]));
     }
-  }, [selectedDirection, selectedRoute, selectedStop]);
+
+    if (selectedTrainStop) {
+      router.push(
+        `/train?stationNumber=${selectedTrainStop}&route=${selectedTrainRoute}`
+      );
+    }
+  }, [selectedDirection, selectedRoute, selectedStop, selectedTrainStop]);
 
   return (
     <div className='App'>
@@ -156,7 +196,43 @@ function App() {
       <div className='main'>
         <div className='dropdowns'>
           <div className='dropdown-routes'>
-            <InputLabel id='routes-label'>Routes</InputLabel>
+            <InputLabel id='routes-label'>Train Routes</InputLabel>
+            <Select
+              style={{ width: 300 }}
+              labelId='routes-label'
+              id='train-routes'
+              value={selectedTrainRoute}
+              onChange={handleTrainRouteSelect}
+            >
+              {train_routes.map((item, index) => (
+                <MenuItem value={item} key={index}>
+                  {item}
+                </MenuItem>
+              ))}
+            </Select>
+          </div>
+
+          <div className='dropdown-direction'>
+            <InputLabel id='routes-label'>Train Stops</InputLabel>
+            <Select
+              style={{ width: 300 }}
+              labelId='train-routes-label'
+              id='train-routes'
+              value={selectedTrainStop}
+              onChange={handleTrainStopSelect}
+            >
+              {trainStops.map((item) => (
+                <MenuItem value={item.stop_id} key={item.stop_id}>
+                  {item.stop_name}
+                </MenuItem>
+              ))}
+            </Select>
+          </div>
+        </div>
+
+        <div className='dropdowns'>
+          <div className='dropdown-routes'>
+            <InputLabel id='routes-label'>Bus Routes</InputLabel>
             <Select
               style={{ width: 300 }}
               labelId='routes-label'
@@ -164,7 +240,7 @@ function App() {
               value={selectedRoute}
               onChange={handleRouteSelect}
             >
-              {routes.map((item, index) => (
+              {routes.map((item) => (
                 <MenuItem value={item.rt} key={item.rt}>
                   {item.rt}. {item.rtnm}{" "}
                 </MenuItem>
@@ -173,7 +249,7 @@ function App() {
           </div>
 
           <div className='dropdown-direction'>
-            <InputLabel id='directions-label'>Directions</InputLabel>
+            <InputLabel id='directions-label'>Bus Directions</InputLabel>
             <Select
               style={{ width: 300 }}
               labelId='directions-label'
@@ -181,7 +257,7 @@ function App() {
               value={selectedDirection}
               onChange={handleDirectionSelect}
             >
-              {directions.map((item, index) => (
+              {directions.map((item) => (
                 <MenuItem value={item.dir} key={item.dir}>
                   {item.dir}
                 </MenuItem>
@@ -190,7 +266,7 @@ function App() {
           </div>
 
           <div className='dropdown-stop'>
-            <InputLabel id='stops-label'>Stops</InputLabel>
+            <InputLabel id='stops-label'>Bus Stops</InputLabel>
             <Select
               style={{ width: 300 }}
               labelId='stops-label'
@@ -198,21 +274,13 @@ function App() {
               value={selectedStop}
               onChange={handleStopSelect}
             >
-              {stops.map((item, index) => (
+              {stops.map((item) => (
                 <MenuItem value={item.stpid} key={item.stpid}>
                   {item.stpnm}{" "}
                 </MenuItem>
               ))}
             </Select>
           </div>
-        </div>
-
-        <div className='shortcuts'>
-          {popularBusRoutes.map((bus) => (
-            <div className='shortcuts-button' key={bus}>
-              <span onClick={() => setSelectedRoute(bus)}>#{bus}</span>
-            </div>
-          ))}
         </div>
 
         <div className='grid'>

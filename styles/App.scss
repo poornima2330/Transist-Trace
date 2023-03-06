@@ -122,7 +122,7 @@ body {
     @include rounded-corners;
     @include shadows;
     padding: 30px 0px;
-    margin-top: -30px;
+    margin-top: 30px;
     @include ease-transition;
 
     @include mobile {
@@ -155,7 +155,7 @@ body {
     }
 
     .prediction {
-      background-color: $primary-color;
+      background-color: $dark-gray;
       color: $white;
       @include rounded-corners;
       @include shadows;
@@ -166,13 +166,25 @@ body {
       justify-content: space-between;
       align-items: center;
       
-
-      &.red {
-        background-color: #C60E30;
+      &.blue {
+        background-color: $primary-color;
       }
 
-      &.brown {
-        background-color: #A95A02;
+      &.red {
+        background-color: $train-red;
+      }
+
+      &.brn {
+        background-color: $train-brown;
+      }
+
+      &.y {
+        background-color: $train-yellow;
+        color: $black;
+      }
+      
+      &.g {
+        background-color: $train-green;
       }
 
       &.loading {

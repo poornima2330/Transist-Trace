@@ -4,14 +4,6 @@ import Buses from "../components/Buses";
 import Trains from "../components/Trains";
 
 export default function Food() {
-  useEffect(() => {
-    async function fetchData() {
-      await fetch("/api/getSheetData")
-        .then((res) => res.json())
-        .then((data) => console.log("res", data));
-    }
-    fetchData();
-  }, []);
   return (
     <div className='main food'>
       <Head>
