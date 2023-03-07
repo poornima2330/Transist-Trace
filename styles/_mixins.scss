@@ -1,0 +1,100 @@
+@mixin rounded-corners {
+  border-radius: 6px;
+}
+
+@mixin ease-transition {
+  transition: 0.455s ease all;
+}
+
+@mixin shadows {
+  box-shadow: 0px 0px 24px rgba(0, 0, 0, 0.25);
+  @include ease-transition;
+
+  &:hover {
+    box-shadow: 0px 0px 24px rgba(0, 0, 0, 0.4);
+  }
+}
+
+@mixin button {
+  -webkit-appearance: none;
+  display: inline-block;
+  text-transform: uppercase;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  color: #ffffff;
+  background: $secondary-color;
+  padding: 12px 20px;
+  border: 2px solid transparent;
+  @include rounded-corners;
+  margin-top: 5px;
+  cursor: pointer;
+  @include ease-transition;
+
+  &.loading {
+    opacity: 0.2;
+  }
+
+  &.full-size {
+    width: 80%;
+    margin: 10px auto;
+    display: block;
+  }
+
+  a {
+    color: #ffffff;
+    display: block;
+
+    &:hover {
+      color: $secondary-color;
+    }
+  }
+
+  &:hover {
+    background: transparent;
+    color: $secondary-color;
+    border: 2px solid $secondary-color;
+
+    a {
+      color: $secondary-color;
+    }
+  }
+
+  &.secondary {
+    background: transparent;
+    color: $secondary-color;
+    border: 2px solid $secondary-color;
+
+    &:hover {
+      color: #ffffff;
+      background: $secondary-color;
+    }
+  }
+}
+
+a.button {
+  @include button;
+}
+
+// Media Queries
+$mobile-width: 300px;
+$tablet-width: 767px;
+$desktop-width: 1024px;
+
+@mixin mobile {
+  @media (min-width: #{$mobile-width}) and (max-width: #{$tablet-width}) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (min-width: #{$tablet-width}) and (max-width: #{$desktop-width - 1px}) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: #{$desktop-width}) {
+    @content;
+  }
+}

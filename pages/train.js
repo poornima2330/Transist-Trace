@@ -8,7 +8,7 @@ export default function TrainPage() {
   const { stationNumber, route } = router.query;
 
   const { data, error, isLoading } = useSWR(
-    `/api/getTrainStops?route=${route}`,
+    `/api/getTrainRoutes?route=${route}`,
     fetcher,
     { refreshInterval: 30000 }
   );
@@ -25,6 +25,8 @@ export default function TrainPage() {
         </div>
       </div>
     );
+
+  console.log(data);
 
   return (
     <div className='main'>
