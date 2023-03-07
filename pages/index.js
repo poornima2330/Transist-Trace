@@ -4,6 +4,8 @@ import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import { InputLabel, MenuItem, Select } from "@material-ui/core";
 import Time from "../components/Time";
+import { train_routes, determineRouteName } from "../lib/trainLines";
+import SelectLines from "../components/SelectLines";
 
 function App() {
   const router = useRouter();
@@ -16,18 +18,6 @@ function App() {
   const [stops, setStops] = useState([]);
   const [selectedStop, setSelectedStop] = useState("");
   const [predictions, setPredictions] = useState([]);
-
-  const train_routes = [
-    "red",
-    "blue",
-    "g",
-    "brn",
-    "p",
-    "pexp",
-    "y",
-    "pnk",
-    "o",
-  ];
   const [selectedTrainRoute, setSelectedTrainRoute] = useState("");
 
   const [trainStops, setTrainStops] = useState([]);
@@ -133,7 +123,7 @@ function App() {
         .catch();
     }
     if (selectedTrainRoute) {
-      fetch(`/api/getTrainRoutes?route=${selectedTrainRoute}`)
+      fetch(`/api/getTrainStops?route=${selectedTrainRoute}`)
         .then((res) => res.json())
         .then((response) => {
           setTrainStops(response);
@@ -179,15 +169,15 @@ function App() {
   return (
     <div className='App'>
       <Head>
-        <title>CTA Bus Tracker for Chicago IL</title>
+        <title>CTA Transit Tracker for Chicago IL</title>
         <link rel='icon' type='image/png' href='/favicon.png' />
       </Head>
-      <div className='header'>CTA Bus Tracker</div>
+      <div className='header'>CTA Transit Tracker</div>
       <div className='welcome'>
         <div className='welcome-left'>
-          <h2 className='welcome-title'>Real-time bus tracker</h2>
+          <h2 className='welcome-title'>Real-time transit tracker</h2>
           <p className='welcome-description'>
-            Get up to date travel times on your route via bus in Chicago.
+            Get up to date travel times on your route via transit in Chicago.
           </p>
         </div>
         <div className='welcome-right'></div>
@@ -206,7 +196,7 @@ function App() {
             >
               {train_routes.map((item, index) => (
                 <MenuItem value={item} key={index}>
-                  {item}
+                  {determineRouteName(item)}
                 </MenuItem>
               ))}
             </Select>
@@ -282,6 +272,8 @@ function App() {
             </Select>
           </div>
         </div>
+
+        <SelectLines />
 
         <div className='grid'>
           <Time />
