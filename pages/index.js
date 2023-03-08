@@ -68,7 +68,6 @@ function App() {
 
   const handleTrainStopSelect = (e) => {
     setSelectedTrainStop(e.target.value);
-    console.log(e.target.value);
   };
 
   const handleRouteSelect = (e) => {

@@ -4,11 +4,13 @@ import {
   Checkbox,
   FormControlLabel,
   FormGroup,
+  TextField,
   InputLabel,
   MenuItem,
   Select,
   Button,
 } from "@material-ui/core";
+import Autocomplete from "@material-ui/lab/Autocomplete";
 import { useRouter } from "next/router";
 
 export default function SelectLines() {
@@ -28,34 +30,38 @@ export default function SelectLines() {
     }
   }, [selectedTrainRoute]);
 
-  const handleChange = (e) => {
+  const handleChange = (e, v) => {
+    console.log("e", e, v);
     const { name, checked } = e.target;
     const isChecked = checked;
 
-    setSelectedStops((prevState) => [...prevState, name]);
-    if (!isChecked)
-      setSelectedStops(selectedStops.filter((stop) => stop !== name));
+    setSelectedStops(v);
+    // if (!isChecked)
+    //   setSelectedStops(selectedStops.filter((stop) => stop !== name));
   };
 
-  const handleTrainRouteSelect = (e) => {
-    setSelectedTrainRoute(e.target.value);
+  console.log("selectedStops", selectedStops);
+
+  const handleTrainRouteSelect = (route) => {
+    setSelectedTrainRoute(route);
   };
 
   return (
     <div>
       <div>
-        <InputLabel id='routes-label'>Train Routes</InputLabel>
         {selectedStops && selectedStops.length > 0 ? (
           <div>
-            {selectedStops.map((item, index) => (index ? ", " : "") + item)}
+            {selectedStops.map(
+              (item, index) => (index ? ", " : "") + item.stop_id
+            )}
             <Button
               variant='contained'
               color='primary'
-              disabled={selectedStops.length > 3}
+              disabled={selectedStops.length > 4}
               onClick={() =>
                 router.push(
                   `/train?stationNumber=${selectedStops.map(
-                    (stop) => stop
+                    (stop) => stop.stop_id
                   )}&route=${selectedTrainRoute}`
                 )
               }
@@ -65,30 +71,42 @@ export default function SelectLines() {
           </div>
         ) : null}
 
-        <Select
-          style={{ width: 300 }}
-          labelId='routes-label'
-          id='train-routes'
-          value={selectedTrainRoute}
-          onChange={handleTrainRouteSelect}
-        >
-          {train_routes.map((item, index) => (
-            <MenuItem value={item} key={index}>
-              {determineRouteName(item)}
-            </MenuItem>
-          ))}
-        </Select>
+        {train_routes.map((item, index) => (
+          <Button onClick={() => handleTrainRouteSelect(item)} key={index}>
+            {determineRouteName(item)}
+          </Button>
+        ))}
       </div>
       {stops && stops.length > 1 ? (
-        <FormGroup row>
-          {stops.map((stop) => (
-            <FormControlLabel
-              key={stop.stop_id}
-              control={<Checkbox onChange={handleChange} name={stop.stop_id} />}
-              label={stop.stop_name}
-            />
-          ))}
-        </FormGroup>
+        <>
+          <h2>{determineRouteName(selectedTrainRoute)}</h2>
+          <Autocomplete
+            id='all-stops'
+            stops
+            multiple
+            disableCloseOnSelect
+            options={stops}
+            onChange={handleChange}
+            getOptionLabel={(stop) => stop.stop_name}
+            renderOption={(stop, { selected }) => (
+              <React.Fragment>
+                <Checkbox style={{ marginRight: 8 }} checked={selected} />
+                {stop.stop_name}
+              </React.Fragment>
+            )}
+            renderInput={(params) => (
+              <>
+                <TextField
+                  onChange={handleChange}
+                  {...params}
+                  margin='normal'
+                  variant='outlined'
+                  label='Stops'
+                />
+              </>
+            )}
+          />
+        </>
       ) : null}
     </div>
   );
