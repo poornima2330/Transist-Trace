@@ -1,38 +1,37 @@
+import { useEffect, useState } from "react";
 import Trains from "../components/Trains";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 import fetcher from "../lib/fetcher";
 
-export default function TrainPage() {
+export default function TrainPage({}) {
   const router = useRouter();
-  const { stationNumber, route } = router.query;
+  const [stationNumbers, setStationNumbers] = useState([]);
 
-  const { data, error, isLoading } = useSWR(
-    `/api/getTrainRoutes?route=${route}`,
-    fetcher,
-    { refreshInterval: 30000 }
-  );
-  if (error || !route || !stationNumber) return <div>failed to load</div>;
-  if (isLoading)
-    return (
-      <div className='main'>
-        <div className='grid'>
-          <div className={`predictions buses`}>
-            <h2 align='center'>Loading...</h2>
-            <div className='prediction loading' />
-            <div className='prediction loading' />
-          </div>
-        </div>
-      </div>
-    );
-
-  console.log(data);
+  useEffect(() => {
+    if (router && router.query) {
+      console.log(router.query);
+      setStationNumbers(router.query.stationNumber.split(","));
+    }
+  }, [router]);
 
   return (
     <div className='main'>
+      <Head>
+        <title>CTA Tracker // Dashboard</title>
+      </Head>
       <div className='grid'>
-        <Trains stationNumber={stationNumber} />
+        {stationNumbers.map((station) => (
+          <Trains stationNumber={station} />
+        ))}
       </div>
     </div>
   );
 }
+
+export const getServerSideProps = async () => {
+  return {
+    props: {},
+  };
+};

@@ -186,6 +186,23 @@ body {
       &.g {
         background-color: $train-green;
       }
+      
+      &.p {
+        background-color: $train-purple;
+      }
+
+      &.pexp {
+        background-color: $train-purple-express;
+      }
+
+      &.pink {
+        background-color: $train-pink;
+        color: $black;
+      }
+
+      &.org {
+        background-color: $train-orange;
+      }
 
       &.loading {
         background-color: $light-gray;

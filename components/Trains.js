@@ -30,8 +30,7 @@ export default function Trains(props) {
   return (
     <div className={`predictions trains`}>
       <h2 align='center'>
-        {data.ctatt.eta ? data.ctatt.eta[0].stpDe : null} Train
-        {trains && trains.length < 2 ? "" : "s"}
+        {data.ctatt.eta ? `${data.ctatt.eta[0].staNm} Station` : null}
       </h2>
       {trains ? (
         trains.map((train) => (
@@ -43,9 +42,9 @@ export default function Trains(props) {
           >
             <p className='prediction-route-number'>
               {"To " + train.destNm}
-              <span className='prediction-route-number-direction'>
-                {train.staNm} Station
-              </span>
+              {/* <span className='prediction-route-number-direction'>
+                {train.stpDe}
+              </span> */}
             </p>
             <p className='prediction-time'>
               {cleanTime(train.arrT) < 2
